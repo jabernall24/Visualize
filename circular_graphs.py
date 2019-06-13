@@ -14,6 +14,7 @@ import boto3
 from botocore.exceptions import ClientError
 from config import S3_BUCKET, S3_KEY, S3_SECRET
 from constants import TEAM_COLORS, NO_COLLEGE
+import requests
 
 
 class PlayerCareerStatsGraphs:
@@ -40,21 +41,19 @@ class PlayerCareerStatsGraphs:
         return organized_stats
 
     def get_chart(self, stat, stat_max, season_type="Regular Season"):
-        s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
-        # s3 = boto3.resource('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+        # s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+        s3 = boto3.resource('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
 
         key = f"Career/{self.player['full_name']}/PlayerCareerStats/{self.player['full_name']}-{self.player['id']}-" \
               f"{season_type}-career_stats_{stat}.png"
 
-        results = s3.list_objects(Bucket=S3_BUCKET, Prefix=key)
-        print(results)
-        return key
-        # try:
-        #     s3.Object(S3_BUCKET, key).get()
-        #     return key
-        # except ClientError as e:
-        #     if e.response['Error']['Code'] != "404":
-        #         return None
+        try:
+            s3.Object(S3_BUCKET, key).load()
+            return key
+        except ClientError as e:
+            if e.response['Error']['Code'] != "404":
+                print(f"Something went wrong{e.response}")
+                return None
 
         career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
         if season_type == "Regular Season":
