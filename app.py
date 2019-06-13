@@ -12,7 +12,6 @@ from constants import TO_MONTH
 from circular_graphs import PlayerCareerStatsGraphs
 from bar_graphs import BarGraph
 import mpld3
-import test
 
 mpl.rcParams.update({'font.size': 24})
 
