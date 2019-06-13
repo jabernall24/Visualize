@@ -6,37 +6,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/player_home.css') }}">
 </head>
 <body>
-    <input type="hidden" id='playerFullName' value="{{ player['full_name'] }}">
+    <input type="hidden" id='player' value="{{ player }}">
+    <button id="test"></button>
     <div class="header">
         <div class="header-top">
             <div>
                 <img id="player-img" src="https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{{ player['id'] }}.png">
             </div>
-            <div class="mini-header">
+            <div id="header-top-container">
                 <div>
                     <h1>{{ player['full_name'] }}</h1>
                 </div>
-                <div class="mini-mini-header">
-{#                    <div>#}
-{#                        <h5>Year Pro: {{ header_stats['Years Pro'] }}</h5>#}
-{#                        <h5>Position: {{ header_stats['Position'] }}</h5>#}
-{#                        <h5>Jersey #: {{ header_stats['Jersey'] }}</h5>#}
-{#                    </div>#}
-{#                    <div>#}
-{#                        <h5>Team: {{ header_stats['Team'] }}</h5>#}
-{#                        <h5>Draft Year: {{ header_stats['Draft Year'] }}</h5>#}
-{#                        <h5>Draft Pick: {{ header_stats['Draft Pick'] }}</h5>#}
-{#                    </div>#}
-{#                    <div>#}
-{#                        <h5>Born: {{ header_stats['Born'] }}</h5>#}
-{#                        <h5>Height: {{ header_stats['Height'] }}</h5>#}
-{#                        <h5>Weight: {{ header_stats['Weight'] }}</h5>#}
-{#                    </div>#}
-{#                    <div>#}
-{#                        <h5>Age: {{ header_stats['Age'] }}</h5>#}
-{#                        <h5>Pro: {{ header_stats['Pro'] }}</h5>#}
-{#                    </div>#}
-                </div>
+                <div id="header-top-content"></div>
             </div>
         </div>
         <div id="nav-bar">
@@ -69,23 +50,27 @@
         </div>
     </div>
 
-    <h2> Regular Season Career Stats</h2>
-    <br/>
-    {% for img in regular_season_img_path %}
-        <img class="plot-img" src="https://visualize-nba-stats.s3-us-west-2.amazonaws.com/{{ regular_season_img_path[img] }}">
-    {% endfor %}
+    <div id="regular-season-plots">
 
-    <h2>Playoffs Career Stats</h2>
-    {% for img in playoffs_img_path %}
-        <img class="plot-img" src="https://visualize-nba-stats.s3-us-west-2.amazonaws.com/{{ playoffs_img_path[img] }}">
-    {% endfor %}
+    </div>
 
-    {% if college_img_path['PTS'] != None %}
-        <h2>College Career Stats</h2>
-        {% for img in college_img_path %}
-            <img class="plot-img" src="https://visualize-nba-stats.s3-us-west-2.amazonaws.com/{{ college_img_path[img] }}">
-        {% endfor %}
-    {% endif %}
+{#    <h2> Regular Season Career Stats</h2>#}
+{#    <br/>#}
+{#    {% for img in regular_season_img_path %}#}
+{#        <img class="plot-img" src="https://visualize-nba-stats.s3-us-west-2.amazonaws.com/{{ regular_season_img_path[img] }}">#}
+{#    {% endfor %}#}
+
+{#    <h2>Playoffs Career Stats</h2>#}
+{#    {% for img in playoffs_img_path %}#}
+{#        <img class="plot-img" src="https://visualize-nba-stats.s3-us-west-2.amazonaws.com/{{ playoffs_img_path[img] }}">#}
+{#    {% endfor %}#}
+
+{#    {% if college_img_path['PTS'] != None %}#}
+{#        <h2>College Career Stats</h2>#}
+{#        {% for img in college_img_path %}#}
+{#            <img class="plot-img" src="https://visualize-nba-stats.s3-us-west-2.amazonaws.com/{{ college_img_path[img] }}">#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
 
     <script src="{{ url_for('static', filename='js/player_home.js') }}"></script>
 </body>

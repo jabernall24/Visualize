@@ -46,13 +46,9 @@ class PlayerCareerStatsGraphs:
         key = f"Career/{self.player['full_name']}/PlayerCareerStats/{self.player['full_name']}-{self.player['id']}-" \
               f"{season_type}-career_stats_{stat}.png"
 
-        try:
-            s3.head_object(Bucket=S3_BUCKET, Key=key)
+        results = s3.list_objects_v2(Bucket=S3_BUCKET, Prefix=key)
+        if 'Contents' in results:
             return key
-        except ClientError as e:
-            if e.response['Error']['Code'] != "404":
-                print(f"Something went wrong{e.response}")
-                return None
 
         career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
         if season_type == "Regular Season":
