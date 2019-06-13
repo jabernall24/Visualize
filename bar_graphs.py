@@ -10,27 +10,14 @@ import mpld3
 import json
 from pprint import pprint
 
+
 class BarGraph(object):
 
     def __init__(self, player_name):
         """
         :param player_name: Name of player you want to plot a graph for
-        :param season: Season you would like to plot (2018-19)
-        :param season_type: Pre Season, Regular Season, Playoffs
         """
-        possible_players = players.find_players_by_full_name(player_name)
-        if len(possible_players) > 1:
-            for i, player in enumerate(possible_players):
-                print(f"For '{player['full_name']}' with id {player['id']} enter {i}")
-
-            index = int(input("Select the player you want: "))
-            self.player = possible_players[index]
-        elif len(possible_players) == 1:
-            self.player = possible_players[0]
-        else:
-            print("Unknown player")
-        # self.season = season
-        # self.season_type = season_type
+        self.player = players.find_players_by_full_name(player_name)[0]
         self.df_game_logs = None
 
     def games_with_x_amount_of_points(self, season, season_type):
@@ -38,13 +25,6 @@ class BarGraph(object):
         :return: Shows a graph of the player's season with the amount of times a player scored between x amount of
                  points
         """
-        # abs_path = os.path.abspath(os.path.dirname(__file__))
-        # path = f"files/{self.player['full_name']}/games_with_x_amount_of_points/{self.player['first_name']}.png"
-        # if os.path.exists(f"{abs_path}/static/{path}"):
-        #     return path
-        #
-        # os.makedirs(f"{abs_path}/static/files/{self.player['full_name']}/games_with_x_amount_of_points/")
-
         if self.df_game_logs is None:
             self.df_game_logs = self.get_game_logs(season=season, season_type=season_type)
 
