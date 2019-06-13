@@ -41,14 +41,13 @@ class PlayerCareerStatsGraphs:
         return organized_stats
 
     def get_chart(self, stat, stat_max, season_type="Regular Season"):
-        # s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
-        s3 = boto3.resource('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+        s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
 
         key = f"Career/{self.player['full_name']}/PlayerCareerStats/{self.player['full_name']}-{self.player['id']}-" \
               f"{season_type}-career_stats_{stat}.png"
 
         try:
-            s3.Object(S3_BUCKET, key).load()
+            s3.head_object(Bucket=S3_BUCKET, Key=key)
             return key
         except ClientError as e:
             if e.response['Error']['Code'] != "404":

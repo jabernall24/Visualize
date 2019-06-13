@@ -32,18 +32,12 @@ def get_players():
 
 @app.route('/players/<name>/stats')
 def player_career_stats(name):
-    # a = datetime.datetime.now()
-    player = players.find_players_by_full_name(name)[0]
-    # b = datetime.datetime.now()
-    # print(f"Finding player takes {b - a}")
-    # a = datetime.datetime.now()
+    player = {'id': 977, 'full_name': 'Kobe Bryant', 'first_name': 'Kobe', 'last_name': 'Bryant', 'is_active': False}
+    # players.find_players_by_full_name(name)[0]
+
     career_stats = PlayerCareerStatsGraphs(player=player)
-    # b = datetime.datetime.now()
-    # print(f"Initializing career stats takes {b - a}")
-    # a = datetime.datetime.now()
     common_player = CommonPlayerInfo(player_id=player['id']).common_player_info.get_dict()['data'][0]
-    # b = datetime.datetime.now()
-    # print(f"Getting common player info takes {b - a}")
+
     team = f"{common_player[20]} {common_player[17]}" if common_player[17] != "" else "No Team/Retired"
 
     header_stats = {
