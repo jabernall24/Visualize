@@ -1,0 +1,140 @@
+
+body {
+    padding-top: 200px;
+}
+
+#careerStats {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.stat {
+    background-color: antiquewhite;
+    height: 100%;
+    padding-left: 50px;
+    border: solid 1px black;
+}
+
+.bottom {
+    position: absolute;
+    width: 100%;
+    background-color: pink;
+    text-align: center;
+}
+
+#player-img {
+    height: 190px;
+}
+
+.plot-img {
+    min-width: 200px;
+    width: 15%;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: antiquewhite;
+    height: 215px;
+}
+
+.mini-header {
+    display: inline-block;
+}
+
+.mini-mini-header {
+    display: flex;
+    overflow: hidden;
+}
+
+h5 {
+    margin: 0 50px 0 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.header-box {
+    border-top: black solid 1px;
+    border-bottom: black solid 1px;
+}
+
+.header-box-outer-left {
+    border-left: black solid 1px;
+}
+
+.header-box-outer-right {
+    border-right: black solid 1px;
+}
+
+.header-box-mini {
+    margin-left: 0;
+    padding-left: 5px;
+    width: 100%;
+    border-bottom: solid black 1px;
+}
+
+.header-left-padding {
+    padding-left: 5px;
+}
+
+#nav-bar {
+    padding: 0;
+    margin: 0;
+    height: 25px;
+    display: flex;
+}
+
+.header-top {
+    height: 190px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.nav-bar-button {
+    background-color: aliceblue;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    height: 25px;
+    width: 100%;
+}
+
+.nav-bar-dropdown  {
+    margin-left: 25px;
+    width: 10%;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 10%;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    text-align: center;
+}
+
+.nav-bar-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 25px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown-item:hover {
+    background-color: pink;
+}

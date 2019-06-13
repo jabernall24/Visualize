@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Home</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    </head>
+    <body>
+        <input type="text" id="playerSearchTextBox" placeholder="Enter player's name">
+        <input type="button" id="searchButton" value="Search">
+
+        <div id="players"></div>
+
+        <script type="text/javascript" src={{ url_for('static', filename='js/home.js') }}></script>
+    </body>
+</html>
