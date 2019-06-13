@@ -12,6 +12,8 @@ from constants import TO_MONTH
 from circular_graphs import PlayerCareerStatsGraphs
 from bar_graphs import BarGraph
 import mpld3
+import boto3
+from config import S3_BUCKET, S3_KEY, S3_SECRET
 
 mpl.rcParams.update({'font.size': 24})
 
@@ -25,13 +27,34 @@ def load_plots():
         "full_name": request.args.get('name')
     }
     a = datetime.datetime.now()
+    s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+
+    key = f"Career/{player['full_name']}/PlayerCareerStats"
+
+    objects = s3.list_objects_v2(Bucket=S3_BUCKET, Prefix=key)
+    if 'Contents' in objects:
+        paths = [obj['Key'] for obj in objects['Contents']]
+        regular_season = list()
+        playoffs = list()
+        college = list()
+        for path in paths:
+            if 'Regular Season' in path:
+                regular_season.append(path)
+            elif 'Playoffs' in path:
+                playoffs.append(path)
+            elif 'College' in path:
+                college.append(path)
+        b = datetime.datetime.now()
+        print(f"It took {b - a}")
+        print(len(paths))
+        return json.dumps([regular_season, playoffs, college])
+
     career_stats = PlayerCareerStatsGraphs(player=player)
     regular_season = career_stats.get_path_dict_for(season_type="Regular Season")
     playoffs = career_stats.get_path_dict_for(season_type="Playoffs")
     college = career_stats.get_path_dict_for(season_type="College")
     paths = [regular_season, playoffs, college]
-    b = datetime.datetime.now()
-    print(f"It took {b - a}")
+
     return json.dumps(paths)
 
 

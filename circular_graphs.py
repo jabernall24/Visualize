@@ -41,23 +41,25 @@ class PlayerCareerStatsGraphs:
         return organized_stats
 
     def get_chart(self, stat, stat_max, season_type="Regular Season"):
-        s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+        # s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
 
         key = f"Career/{self.player['full_name']}/PlayerCareerStats/{self.player['full_name']}-{self.player['id']}-" \
               f"{season_type}-career_stats_{stat}.png"
+        #
+        # results = s3.list_objects_v2(Bucket=S3_BUCKET, Prefix=key)
+        # if 'Contents' in results:
+        #     return key
 
-        results = s3.list_objects_v2(Bucket=S3_BUCKET, Prefix=key)
-        if 'Contents' in results:
-            return key
-
-        career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
         if season_type == "Regular Season":
+            career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
             career_stats = career_stats.career_totals_regular_season.get_dict()['data'][0]
         elif season_type == "Playoffs":
+            career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
             career_stats = career_stats.career_totals_post_season.get_dict()['data'][0]
         elif season_type == "College":
             if self.player['full_name'] in NO_COLLEGE:
                 return None
+            career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
             career_stats = career_stats.career_totals_college_season.get_dict()['data']
             if len(career_stats) == 0:
                 return None
