@@ -2,7 +2,7 @@
 const strPlayer = document.getElementById('player').value;
 const player = stringArrayToDictionary(strPlayer);
 
-loadHeaders();
+// loadHeaders();
 loadPlots();
 
 function loadPlots() {

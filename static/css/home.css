@@ -33,7 +33,7 @@ body {
 
 #players {
     margin: 0 auto;
-    transform: translateX(-8%);
+    transform: translateX(-23%);
     width: 30.75%;
     max-height: 28vh;
     overflow: scroll;

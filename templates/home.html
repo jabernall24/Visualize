@@ -6,7 +6,17 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
     </head>
     <body>
+        <div>
+            <h1> Welcome </h1>
+            <h6> Visualize stats of NBA players. <br/> Filter by player's name, stat, or year. </h6>
+        </div>
         <input type="text" id="playerSearchTextBox" placeholder="Enter player's name">
+        <select>
+            <option>Year</option>
+        </select>
+        <select>
+            <option>Stat</option>
+        </select>
         <input type="button" id="searchButton" value="Search">
 
         <div id="players"></div>
