@@ -55,7 +55,7 @@ class PlayerCareerStatsGraphs:
             'Connection': 'keep-alive',
         }
         print("Got here")
-        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
+        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode, timeout=120)
         print("End of api call")
         b = datetime.datetime.now()
         print(f"Api call took: {b - a}")
