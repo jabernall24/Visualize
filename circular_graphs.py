@@ -50,7 +50,16 @@ class PlayerCareerStatsGraphs:
         season_types = ['Regular Season', 'Playoffs', 'College']
 
         print("Got here")
-        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
+        STATS_HEADERS = {
+            'Host': 'stats.nba.com',
+            'User-Agent': 'PostmanRuntime/7.4.0',
+            # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+        }
+        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode, headers=STATS_HEADERS)
         print("End of api call")
 
         b = datetime.datetime.now()

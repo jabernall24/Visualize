@@ -77,8 +77,6 @@ def load_headers():
 
 @app.route('/')
 def hello_world():
-    test = LeagueLeaders().team_stats
-    print("This shit worked")
     return render_template('home.html')
 
 
