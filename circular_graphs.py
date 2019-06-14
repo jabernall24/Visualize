@@ -55,8 +55,7 @@ class PlayerCareerStatsGraphs:
             'Connection': 'keep-alive',
         }
         print("Got here")
-        player_career_stats = requests.get('https://stats.nba.com/stats/playercareerstats?LeagueID=&PerMode=Totals&PlayerID=2544', headers=STATS_HEADERS)
-        # player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
+        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
         print("End of api call")
         b = datetime.datetime.now()
         print(f"Api call took: {b - a}")
