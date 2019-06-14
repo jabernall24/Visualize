@@ -18,7 +18,6 @@ import requests
 from multiprocessing.pool import ThreadPool
 
 
-
 class PlayerCareerStatsGraphs:
 
     def __init__(self, player, mode="PerGame"):

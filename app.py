@@ -15,6 +15,7 @@ import mpld3
 import boto3
 from config import S3_BUCKET, S3_KEY, S3_SECRET
 
+
 mpl.rcParams.update({'font.size': 24})
 
 app = Flask(__name__)
