@@ -39,26 +39,23 @@ class PlayerCareerStatsGraphs:
             "TOV": stats[21],
             "PTS": stats[23],
         }
+
         return organized_stats
 
     def get_all_chart(self):
         a = datetime.datetime.now()
+
         stats = ['PTS', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'FG_PCT', 'FT_PCT', 'FG3_PCT', 'GP', 'GS']
         stats_max = [35, 23, 12, 3, 4, 5, 1, 1, 1, 1700, 1700]
         season_types = ['Regular Season', 'Playoffs', 'College']
-        STATS_HEADERS = {
-            'Host': 'stats.nba.com',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0',
-            'Accept': 'application/json, text/plain, */*',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Connection': 'keep-alive',
-        }
+
         print("Got here")
-        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode, timeout=120)
+        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
         print("End of api call")
+
         b = datetime.datetime.now()
         print(f"Api call took: {b - a}")
+
         regular_paths = list()
         playoff_paths = list()
         college_paths = list()
@@ -116,6 +113,8 @@ class PlayerCareerStatsGraphs:
 
                 s3 = boto3.resource('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
                 s3.Object(S3_BUCKET, S3_KEY).put(ACL='public-read', Body=img, Key=key)
+
         b = datetime.datetime.now()
         print(f"This took: {b - a}")
+
         return [regular_paths, playoff_paths, college_paths]

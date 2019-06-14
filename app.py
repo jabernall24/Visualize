@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect
 from PIL import Image
 from nba_api.stats.static import players
 import json
-from nba_api.stats.endpoints import PlayerCareerStats, CommonPlayerInfo
+from nba_api.stats.endpoints import PlayerCareerStats, CommonPlayerInfo, LeagueLeaders
 from pprint import pprint
 from matplotlib import pyplot as plt
 import matplotlib as mpl
@@ -11,7 +11,6 @@ import datetime
 from constants import TO_MONTH
 from circular_graphs import PlayerCareerStatsGraphs
 from bar_graphs import BarGraph
-import mpld3
 import boto3
 from config import S3_BUCKET, S3_KEY, S3_SECRET
 
@@ -78,6 +77,8 @@ def load_headers():
 
 @app.route('/')
 def hello_world():
+    test = LeagueLeaders().team_stats
+    print("This shit worked")
     return render_template('home.html')
 
 
@@ -92,43 +93,7 @@ def get_players():
 def player_career_stats(name):
     player = players.find_players_by_full_name(name)[0]
 
-    # career_stats = PlayerCareerStatsGraphs(player=player)
-    # common_player = CommonPlayerInfo(player_id=player['id']).common_player_info.get_dict()['data'][0]
-    #
-    # team = f"{common_player[20]} {common_player[17]}" if common_player[17] != "" else "No Team/Retired"
-    #
-    # header_stats = {
-    #     "Years Pro": common_player[12],
-    #     "Position": common_player[14],
-    #     "Jersey": common_player[13],
-    #     "Team": team,
-    #     "Draft Year": common_player[27],
-    #     "Draft Pick": f"Round {common_player[28]} Pick {common_player[29]}",
-    #     "Born": transform_date(common_player[6]),
-    #     "Height": common_player[10],
-    #     "Weight": f"{common_player[11]} lbs",
-    #     "Age": get_age_from_date(common_player[6]),
-    #     "Pro": f"{common_player[22]} - {common_player[23]}",
-    # }
-    # a = datetime.datetime.now()
-    # regular_season_img = career_stats.get_path_dict_for(season_type="Regular Season")
-    # b = datetime.datetime.now()
-    # print(f"Regular season takes {b - a}")
-    # a = datetime.datetime.now()
-    # playoffs_img = career_stats.get_path_dict_for(season_type="Playoffs")
-    # b = datetime.datetime.now()
-    # print(f"Playoffs takes {b - a}")
-    # a = datetime.datetime.now()
-    # college_img = career_stats.get_path_dict_for(season_type="College")
-    # b = datetime.datetime.now()
-    # print(f"College takes {b - a}")
-
-    return render_template('player_home.html',
-                           player=player,)
-                           # regular_season_img_path=regular_season_img,
-                           # playoffs_img_path=playoffs_img,
-                           # college_img_path=college_img,)
-                           # header_stats=header_stats)
+    return render_template('player_home.html', player=player)
 
 
 @app.route('/players/<name>/stats/circular-bar-graphs')
