@@ -47,7 +47,9 @@ class PlayerCareerStatsGraphs:
         stats_max = [35, 23, 12, 3, 4, 5, 1, 1, 1, 1700, 1700]
         season_types = ['Regular Season', 'Playoffs', 'College']
 
+        print("Got here")
         player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
+        print("End of api call")
         regular_paths = list()
         playoff_paths = list()
         college_paths = list()
