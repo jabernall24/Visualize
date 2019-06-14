@@ -15,6 +15,8 @@ from botocore.exceptions import ClientError
 from config import S3_BUCKET, S3_KEY, S3_SECRET
 from constants import TEAM_COLORS, NO_COLLEGE
 import requests
+from multiprocessing.pool import ThreadPool
+
 
 
 class PlayerCareerStatsGraphs:
@@ -40,74 +42,68 @@ class PlayerCareerStatsGraphs:
         }
         return organized_stats
 
-    def get_chart(self, stat, stat_max, season_type="Regular Season"):
-        # s3 = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+    def get_all_chart(self):
+        stats = ['PTS', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'FG_PCT', 'FT_PCT', 'FG3_PCT', 'GP', 'GS']
+        stats_max = [35, 23, 12, 3, 4, 5, 1, 1, 1, 1700, 1700]
+        season_types = ['Regular Season', 'Playoffs', 'College']
 
-        key = f"Career/{self.player['full_name']}/PlayerCareerStats/{self.player['full_name']}-{self.player['id']}-" \
-              f"{season_type}-career_stats_{stat}.png"
-        #
-        # results = s3.list_objects_v2(Bucket=S3_BUCKET, Prefix=key)
-        # if 'Contents' in results:
-        #     return key
+        player_career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
+        regular_paths = list()
+        playoff_paths = list()
+        college_paths = list()
 
-        if season_type == "Regular Season":
-            career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
-            career_stats = career_stats.career_totals_regular_season.get_dict()['data'][0]
-        elif season_type == "Playoffs":
-            career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
-            career_stats = career_stats.career_totals_post_season.get_dict()['data'][0]
-        elif season_type == "College":
-            if self.player['full_name'] in NO_COLLEGE:
-                return None
-            career_stats = PlayerCareerStats(player_id=self.player['id'], per_mode36=self.mode)
-            career_stats = career_stats.career_totals_college_season.get_dict()['data']
-            if len(career_stats) == 0:
-                return None
-            career_stats = career_stats[0]
-        else:
-            print("Error: Only valid types are Regular Season, Playoffs, College")
-            return None
+        for season_type in season_types:
+            if season_type == 'Regular Season':
+                career_stats = player_career_stats.career_totals_regular_season.get_dict()['data']
+                if len(career_stats) == 0:
+                    continue
+                career_stats = career_stats[0]
+            elif season_type == "Playoffs":
+                career_stats = player_career_stats.career_totals_post_season.get_dict()['data']
+                if len(career_stats) == 0:
+                    continue
+                career_stats = career_stats[0]
+            else:
+                career_stats = player_career_stats.career_totals_college_season.get_dict()['data']
+                if len(career_stats) == 0:
+                    continue
+                career_stats = career_stats[0]
 
-        career_stats = self.get_regular_season_stats_dict(career_stats)
+            career_stats = self.get_regular_season_stats_dict(career_stats)
 
-        # create data
-        size_of_groups = [career_stats[stat], stat_max - career_stats[stat]]
-        colors = ["purple", "white"]
+            for stat, stat_max in zip(stats, stats_max):
+                key = f"Career/{self.player['full_name']}/PlayerCareerStats/{self.player['full_name']}-" \
+                      f"{self.player['id']}-{season_type}-career_stats_{stat}.png"
+                if season_type == 'Regular Season':
+                    regular_paths.append(key)
+                elif season_type == "Playoffs":
+                    playoff_paths.append(key)
+                else:
+                    college_paths.append(key)
+                # create data
+                size_of_groups = [career_stats[stat], stat_max - career_stats[stat]]
+                colors = ["purple", "white"]
 
-        # Create a pieplot
-        fig, ax = plt.subplots()
-        ax.pie(size_of_groups, colors=colors)
-        plt.title(stat)
+                # Create a pieplot
+                fig, ax = plt.subplots()
+                ax.pie(size_of_groups, colors=colors)
+                plt.title(stat)
 
-        # add a circle at the center
-        my_circle = plt.Circle((0, 0), 0.7, color='white')
+                # add a circle at the center
+                my_circle = plt.Circle((0, 0), 0.7, color='white')
 
-        p = plt.gcf()
-        p.gca().add_artist(my_circle)
-        p.text(0.45, 0.5, career_stats[stat])
+                p = plt.gcf()
+                p.gca().add_artist(my_circle)
+                p.text(0.45, 0.5, career_stats[stat])
 
-        # upload to aws
-        img_data = io.BytesIO()
-        plt.savefig(img_data, format='png')
-        img_data.seek(0)
-        img = img_data.read()
+                # Prepping images to upload
+                img_data = io.BytesIO()
+                plt.savefig(img_data, format='png')
+                img_data.seek(0)
+                img = img_data.read()
+                plt.close('all')
 
-        s3 = boto3.resource('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
-        s3.Object(S3_BUCKET, S3_KEY).put(ACL='public-read', Body=img, Key=key)
+                s3 = boto3.resource('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+                s3.Object(S3_BUCKET, S3_KEY).put(ACL='public-read', Body=img, Key=key)
 
-        return key
-
-    def get_path_dict_for(self, season_type):
-        return {
-            "PTS": self.get_chart(stat="PTS", stat_max=35, season_type=season_type),
-            "REB": self.get_chart(stat="REB", stat_max=23, season_type=season_type),
-            "AST": self.get_chart(stat="AST", stat_max=12, season_type=season_type),
-            "STL": self.get_chart(stat="STL", stat_max=3, season_type=season_type),
-            "BLK": self.get_chart(stat="BLK", stat_max=4, season_type=season_type),
-            "TOV": self.get_chart(stat="TOV", stat_max=5, season_type=season_type),
-            "FG_PCT": self.get_chart(stat="FG_PCT", stat_max=1, season_type=season_type),
-            "FT_PCT": self.get_chart(stat="FT_PCT", stat_max=1, season_type=season_type),
-            "FG3_PCT": self.get_chart(stat="FG3_PCT", stat_max=1, season_type=season_type),
-            "GP": self.get_chart(stat="GP", stat_max=1700, season_type=season_type),
-            "GS": self.get_chart(stat="GS", stat_max=1700, season_type=season_type),
-        }
+        return [regular_paths, playoff_paths, college_paths]

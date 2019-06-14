@@ -17,7 +17,7 @@ function loadPlots() {
             let titles = ["<h2> Regular Season Career Stats</h2>", "<h2> Playoffs Career Stats</h2>", "<h2> College Career Stats</h2>"];
             let tempHTML = "";
             for(let num in stats) {
-                if(stats[num]['AST'] !== null) {
+                if(stats[num].length !== 0) {
                     tempHTML += titles[num];
                     for(let img in stats[num]) {
                         tempHTML += "<img class='plot-img' src='https://visualize-nba-stats.s3-us-west-2.amazonaws.com/" + stats[num][img] + "'>";

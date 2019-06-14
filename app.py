@@ -46,16 +46,10 @@ def load_plots():
                 college.append(path)
         b = datetime.datetime.now()
         print(f"It took {b - a}")
-        print(len(paths))
         return json.dumps([regular_season, playoffs, college])
 
-    career_stats = PlayerCareerStatsGraphs(player=player)
-    regular_season = career_stats.get_path_dict_for(season_type="Regular Season")
-    playoffs = career_stats.get_path_dict_for(season_type="Playoffs")
-    college = career_stats.get_path_dict_for(season_type="College")
-    paths = [regular_season, playoffs, college]
-
-    return json.dumps(paths)
+    career_stats = PlayerCareerStatsGraphs(player=player).get_all_chart()
+    return json.dumps(career_stats)
 
 
 @app.route('/load/headers')
