@@ -43,6 +43,7 @@ class PlayerCareerStatsGraphs:
         return organized_stats
 
     def get_all_chart(self):
+        a = datetime.datetime.now()
         stats = ['PTS', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'FG_PCT', 'FT_PCT', 'FG3_PCT', 'GP', 'GS']
         stats_max = [35, 23, 12, 3, 4, 5, 1, 1, 1, 1700, 1700]
         season_types = ['Regular Season', 'Playoffs', 'College']
@@ -51,7 +52,8 @@ class PlayerCareerStatsGraphs:
         regular_paths = list()
         playoff_paths = list()
         college_paths = list()
-
+        b = datetime.datetime.now()
+        print(f"API call is done and it took: {b - a}")
         for season_type in season_types:
             if season_type == 'Regular Season':
                 career_stats = player_career_stats.career_totals_regular_season.get_dict()['data']
