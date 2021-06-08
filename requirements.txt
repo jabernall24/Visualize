@@ -18,7 +18,7 @@ mpld3==0.3
 nba-api==1.1.4
 numpy==1.16.4
 pandas==0.24.2
-Pillow==6.0.0
+Pillow==8.2.0
 pyparsing==2.4.0
 python-dateutil==2.8.0
 pytz==2019.1
